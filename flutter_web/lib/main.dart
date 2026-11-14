@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-// Week 14 educational demo. NEVER embed account passwords or API secrets in web assets.
+// Week 15 integration testing demo. NEVER embed account passwords or API secrets in web assets.
 const apiBase = String.fromEnvironment('TRACKER_API_BASE', defaultValue: 'http://127.0.0.1:8091');
 void main() => runApp(const TrackerApp());
 class TrackerApp extends StatelessWidget {
   const TrackerApp({super.key});
   @override Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Research Submission Tracker | Week 14',
+    title: 'Research Submission Tracker | Week 15',
     theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
     home: const TrackerPage(),
   );
@@ -53,6 +53,10 @@ class _TrackerPageState extends State<TrackerPage> {
  }
  Future<void> act(String path,Map<String,dynamic> payload) async {
   if(token==null)return;
+  if(path=='/submissions' && (title.text.trim().isEmpty || student.text.trim().isEmpty)) {
+   setState(()=>message='Validation error: research title and fictional student name are required');
+   return;
+  }
   setState((){loading=true;message='Processing...';});
   String resultMessage='';
   try {final result=await api(path,body:payload);resultMessage='Success: ${jsonEncode(result)}';}
@@ -63,7 +67,7 @@ class _TrackerPageState extends State<TrackerPage> {
   if(mounted)setState(()=>loading=false);
  }
  @override Widget build(BuildContext context) => Scaffold(
-  appBar:AppBar(title:const Text('Research Submission Tracker | Week 14',maxLines:2,overflow:TextOverflow.ellipsis)),
+  appBar:AppBar(title:const Text('Research Submission Tracker | Week 15',maxLines:2,overflow:TextOverflow.ellipsis)),
   body:Center(child:ConstrainedBox(constraints:const BoxConstraints(maxWidth:900),child:ListView(padding:const EdgeInsets.all(16),children:[
    const Text('Controlled demo data • No credentials stored in Flutter source • Local testing only',style:TextStyle(fontWeight:FontWeight.bold)),
    const SizedBox(height:8),Text('API: $apiBase',style:const TextStyle(fontSize:12)),
@@ -75,19 +79,21 @@ class _TrackerPageState extends State<TrackerPage> {
    ]else...[
     Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children:[Flexible(child:Text('Signed in as $role')),OutlinedButton(onPressed:loading?null:logout,child:const Text('Log out'))]),
     const Divider(),Text('Summary: ${jsonEncode(summary)}'),
+    if(role=='student')... [
     const SizedBox(height:12),const Text('2. Create research submission (student only)',style:TextStyle(fontWeight:FontWeight.bold)),
     TextField(controller:title,maxLength:150,decoration:const InputDecoration(labelText:'Research title')),
     TextField(controller:student,maxLength:100,decoration:const InputDecoration(labelText:'Fictional student name')),
     FilledButton(onPressed:loading?null:()=>act('/submissions',{'title':title.text,'student':student.text}),child:const Text('Submit')),
+    ],
     const Divider(),const Text('3. Review, revision and automation',style:TextStyle(fontWeight:FontWeight.bold)),
     if(items.isEmpty)const Text('No submissions yet.'),
     ...items.map((e)=>RadioListTile<int>(value:e['id'] as int,groupValue:selected,onChanged:(v)=>setState(()=>selected=v),title:Text('#${e['id']} ${e['title']} | v${e['version']}'),subtitle:Text('Status: ${e['status']} • Reviewer: ${e['reviewer'] ?? 'unassigned'} • Due: ${e['deadline'] ?? 'none'}'))),
     TextField(controller:reviewer,decoration:const InputDecoration(labelText:'Reviewer (fictional)')),
     TextField(controller:deadline,decoration:const InputDecoration(labelText:'Deadline YYYY-MM-DD')),
     Wrap(spacing:8,runSpacing:4,children:[
-     OutlinedButton(onPressed:selected==null||loading?null:()=>act('/assign',{'id':selected,'reviewer':reviewer.text,'deadline':deadline.text}),child:const Text('Assign reviewer (staff)')),
-     OutlinedButton(onPressed:selected==null||loading?null:()=>act('/revision',{'id':selected}),child:const Text('Submit revision (student)')),
-     OutlinedButton(onPressed:selected==null||loading?null:()=>act('/automation/run',{'id':selected,'simulate':'none'}),child:const Text('Run reminder (staff)')),
+     if(role=='staff') OutlinedButton(onPressed:selected==null||loading?null:()=>act('/assign',{'id':selected,'reviewer':reviewer.text,'deadline':deadline.text}),child:const Text('Assign reviewer (staff)')),
+     if(role=='student') OutlinedButton(onPressed:selected==null||loading?null:()=>act('/revision',{'id':selected}),child:const Text('Submit revision (student)')),
+     if(role=='staff') OutlinedButton(onPressed:selected==null||loading?null:()=>act('/automation/run',{'id':selected,'simulate':'none'}),child:const Text('Run reminder (staff)')),
     ]),
     OutlinedButton(onPressed:loading?null:refresh,child:const Text('Refresh summary')),
    ],
