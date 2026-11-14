@@ -1,8 +1,8 @@
-﻿# Research Submission Tracker — Project 28 | Weeks 13–14
+﻿# Research Submission Tracker — Project 28 | Weeks 13–15
 
 This educational project uses Flutter Web and a Python backend to manage research submissions and demonstrate system security. Week 13 focused on submission tracking, simulated notifications, and reviewer assignments. Week 14 introduced authentication, role-based access control, protected API requests, session management, and local HTTPS integration.
 
-**Development Status:** Weeks 13–14 completed for educational testing. This system is not production-ready. Only fictional student information should be used.
+**Development Status:** Weeks 13–15 completed for educational testing. This system is not production-ready. Only fictional student information should be used.
 
 ## 1. Requirements
 Python 3.10+; Flutter SDK; Chrome; network access once to install the Flutter `http` dependency.
@@ -89,4 +89,43 @@ Additional manual tests verified session expiration, invalid submission rejectio
 5. Run `python test_security.py` from the backend directory.
 
 **Security Notice:** Never upload passwords, session tokens, local databases, or private keys to GitHub. This system is intended for educational local testing only.
+
+
+
+## Week 15 — Integration Testing and Security Hardening
+
+Week 15 builds on the Week 13 submission tracking features and Week 14 authentication and HTTPS integration.
+
+### Completed Testing
+
+- Backend regression testing: 20/20 passed
+- Flutter login-interface widget test: 1/1 passed
+- Authentication and authorization security smoke tests: passed
+- Security hardening source checks: 5/5 verified
+
+### Security Improvements
+
+- SQLite connection cleanup
+- JSON content-type and request-size validation
+- Safe request logging
+- Role-based authorization
+- Session and authentication regression testing
+
+### Testing Commands
+
+Backend:
+- `python -m unittest -v test_week15.py`
+- `python test_security.py` (requires configured demo credentials and a running local API)
+
+Flutter Web:
+- `flutter pub get`
+- `flutter test`
+
+### Limitations
+
+This is an educational prototype, not a production-ready system. Only fictional data should be used. The Flutter widget test covers basic login-interface rendering; additional state and failure-recovery testing is recommended.
+
+### Week 15 Repository
+
+https://github.com/Francisparong/research-submission-tracker/tree/week15-testing-hardening
 
