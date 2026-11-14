@@ -66,3 +66,21 @@ venv/
 
 # Backend Temporary Files
 *.log
+
+# Python Backend
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and Certificates
+.env
+.env.*
+!.env.example
+*.pem
+*.key

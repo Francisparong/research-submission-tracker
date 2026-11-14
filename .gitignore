@@ -2,3 +2,7 @@ backend/tracker.db
 .dart_tool/
 build/
 .flutter-plugins*
+
+# Python cache
+__pycache__/
+*.pyc
