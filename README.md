@@ -1,11 +1,13 @@
-# Research Submission Tracker — Project 28 | Weeks 13–14
+﻿# Research Submission Tracker — Project 28 | Weeks 13–14
 
-Educational prototype with Python standard-library API + Flutter Web. **Not production-ready.** All names must be fictional. The `X-Demo-Role` header is intentionally an insecure role simulation for Week 13; it is NOT authentication. Week 14 must replace it with real server-side authentication and authorization.
+This educational project uses Flutter Web and a Python backend to manage research submissions and demonstrate system security. Week 13 focused on submission tracking, simulated notifications, and reviewer assignments. Week 14 introduced authentication, role-based access control, protected API requests, session management, and local HTTPS integration.
+
+**Development Status:** Weeks 13–14 completed for educational testing. This system is not production-ready. Only fictional student information should be used.
 
 ## 1. Requirements
 Python 3.10+; Flutter SDK; Chrome; network access once to install the Flutter `http` dependency.
 
-## 2. Run API
+## 2. Run API (Week 13 Legacy HTTP Setup)
 Open Terminal/CMD in `backend`, then:
 
 ```bat
@@ -40,14 +42,14 @@ If Flutter says target files exist, preserve the supplied `lib/main.dart` and `p
 **This prototype records simulated notifications, not actual emails/SMS.** Retries are simulated inline for repeatable proof; production-ready scheduling, real integrations, and hardened role security remain limitations.
 
 ## 5. API contract
-- `GET /health` — service status
-- `GET /submissions` — list
-- `POST /submissions` — `{title, student}` demo student
-- `POST /assign` — `{id, reviewer, deadline}` demo staff
-- `POST /revision` — `{id}` demo student
-- `POST /automation/run` — `{id, simulate}` where simulate is `none`, `transient`, or `permanent`; demo staff
-- `GET /events` — structured event list
-- `GET /summary` — counts
+- `GET /health` â€” service status
+- `GET /submissions` â€” list
+- `POST /submissions` â€” `{title, student}` demo student
+- `POST /assign` â€” `{id, reviewer, deadline}` demo staff
+- `POST /revision` â€” `{id}` demo student
+- `POST /automation/run` â€” `{id, simulate}` where simulate is `none`, `transient`, or `permanent`; demo staff
+- `GET /events` â€” structured event list
+- `GET /summary` â€” counts
 
 ## 6. Week 13 scope and alternatives
 Trigger: on-demand demonstration of scheduled/event-driven candidate notifications. Event types: review assignment, version-status update, deadline reminder, overdue escalation. Bounded delivery retry max 3. Permanent failure -> manual review. This is a simplified educational vertical slice; a real daily scheduler and notification provider are future implementation tasks.
@@ -56,3 +58,35 @@ Alternative considered: external SMS/email (rejected for demo due to credentials
 
 ## 7. Safety
 Never upload `backend/tracker.db` with real people or any credentials. Use fake names. Review screenshots before sharing. Preserve original evidence; do not fabricate screenshots or logs. Cite permitted assistance in your individual note.
+
+## Week 14 — Secure Authentication and HTTPS Integration
+
+### Implemented Security Features
+
+- Student and staff authentication
+- Role-based access control
+- Protected API endpoints
+- Session expiration and logout
+- Invalid password and tampered token rejection
+- HTTPS communication using a trusted local certificate
+- Server-side submission validation
+- Git exclusions for databases and sensitive files
+
+### Security Testing Results
+
+The automated security test script completed 11 checks successfully.
+
+**Result: 11/11 PASS (100%)**
+
+Additional manual tests verified session expiration, invalid submission rejection, and HTTPS integration.
+
+### Week 14 Local Setup
+
+1. Configure separate demo credentials using `TRACKER_STUDENT_PASSWORD` and `TRACKER_STAFF_PASSWORD`.
+2. Configure `TRACKER_TLS_CERT` and `TRACKER_TLS_KEY` using local development certificate paths.
+3. Start the backend using `python server.py`.
+4. Run Flutter Web using `--dart-define=TRACKER_API_BASE=https://localhost:8091`.
+5. Run `python test_security.py` from the backend directory.
+
+**Security Notice:** Never upload passwords, session tokens, local databases, or private keys to GitHub. This system is intended for educational local testing only.
+
