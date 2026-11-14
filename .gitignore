@@ -6,3 +6,6 @@ build/
 # Python cache
 __pycache__/
 *.pyc
+
+# Local browser testing tools
+flutter_web/chromedriver/
