@@ -1,4 +1,4 @@
-# Research Submission Tracker — Project 28, Week 13 SA7
+# Research Submission Tracker — Project 28 | Weeks 13–14
 
 Educational prototype with Python standard-library API + Flutter Web. **Not production-ready.** All names must be fictional. The `X-Demo-Role` header is intentionally an insecure role simulation for Week 13; it is NOT authentication. Week 14 must replace it with real server-side authentication and authorization.
 
