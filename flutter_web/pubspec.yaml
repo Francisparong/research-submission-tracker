@@ -1,0 +1,12 @@
+name: research_submission_tracker
+version: 1.0.0+1
+description: Week 13 Research Submission Tracker prototype
+publish_to: none
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.3.0
+flutter:
+  uses-material-design: true

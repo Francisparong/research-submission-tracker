@@ -1,0 +1,4 @@
+backend/tracker.db
+.dart_tool/
+build/
+.flutter-plugins*
